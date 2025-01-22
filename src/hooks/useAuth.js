@@ -2,8 +2,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginSuccess, logout } from "../store/slices/authSlice";
-
+import { loginSuccess, logout } from "../store/authSlice";
 export const useAuth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
