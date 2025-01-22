@@ -3,6 +3,7 @@ import FormItem from "../components/formItem";
 import Button from "../components/button";
 import PasswordForm from "../components/passwordForm";
 import useAuth from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [formValues, setFormValues] = useState({
@@ -11,7 +12,8 @@ export default function Login() {
   });
 
   const [error, setError] = useState(null);
-  const { login } = useAuth(); // Access the login function from useAuth
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleUsernameChange = (value) => {
     setFormValues((prev) => ({
@@ -39,6 +41,10 @@ export default function Login() {
     }
   };
 
+  const handleRegisterNavigation = () => {
+    navigate("/register");
+  };
+
   return (
     <section className="w-full h-screen overflow-hidden bg-base flex flex-row justify-center items-center px-[20px] py-[24px]">
       <div className="hidden h-full md:flex w-1/2 rounded-[12px] bg-grey">adads</div>
@@ -46,7 +52,12 @@ export default function Login() {
         <div className="content flex w-full md:w-[50%]  h-auto flex-col items-center gap-[37px]">
           <p className="flex flex-col items-center text-center text-26-700">
             Login
-            <span className="text-14-500">or create an account</span>
+            <button
+              className="text-14-500"
+              onClick={handleRegisterNavigation}
+            >
+              or create an <span className="underline">account</span>
+            </button>
           </p>
           <div className="form w-full flex flex-col gap-[16px]">
             <FormItem label="Username" onChange={handleUsernameChange} placeholder="Enter your email" />
