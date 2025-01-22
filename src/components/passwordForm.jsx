@@ -17,7 +17,7 @@ export default function PasswordForm({ label, placeholder, onChange, inputRef, r
     <div className="form w-full flex-col flex items-start gap-[8px]" {...props}>
       <label className="text-black text-14-700">{label}</label>
       <div className="relative w-full">
-        <textarea
+        <input
           rows={rows}
           ref={inputRef}
           onChange={handleInputChange}
@@ -26,7 +26,7 @@ export default function PasswordForm({ label, placeholder, onChange, inputRef, r
           className="appearance-none rounded-[12px] w-full bg-secondary p-[14px] text-grey leading-tight focus:outline-none focus:shadow-outline"
         />
         <button type="button" className="absolute top-1/2 right-4 transform -translate-y-1/2" onClick={handleTogglePasswordVisibility}>
-          {showPassword ? <IoEyeOffSharp /> : <IoEyeSharp />}
+          {showPassword ?   <IoEyeSharp /> :  <IoEyeOffSharp />}
         </button>
       </div>
     </div>
