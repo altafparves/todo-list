@@ -40,20 +40,23 @@ export default function Login() {
   };
 
   return (
-    <section className="w-full h-screen overflow-hidden bg-base flex justify-center items-center px-[20px]">
-      <div className="content flex w-full h-auto flex-col items-center gap-[37px]">
-        <p className="flex flex-col items-center text-center text-26-700">
-          Login
-          <span className="text-14-500">or create an account</span>
-        </p>
-        <div className="form w-full flex flex-col gap-[16px]">
-          <FormItem label="Username" onChange={handleUsernameChange} placeholder="Enter your email" />
-          <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
-          <div className="flex flex-col gap-[8px] w-full">
-            {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red-500">{error}</p>}
-            <Button className="mt-[16px]" onClick={handleSubmit}>
-              Login
-            </Button>
+    <section className="w-full h-screen overflow-hidden bg-base flex flex-row justify-center items-center px-[20px] py-[24px]">
+      <div className="hidden h-full md:flex w-1/2 rounded-[12px] bg-grey">adads</div>
+      <div className="w-full md:w-1/2 flex items-center justify-center">
+        <div className="content flex w-full md:w-[50%]  h-auto flex-col items-center gap-[37px]">
+          <p className="flex flex-col items-center text-center text-26-700">
+            Login
+            <span className="text-14-500">or create an account</span>
+          </p>
+          <div className="form w-full flex flex-col gap-[16px]">
+            <FormItem label="Username" onChange={handleUsernameChange} placeholder="Enter your email" />
+            <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
+            <div className="flex flex-col gap-[8px] w-full">
+              {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red-500">{error}</p>}
+              <Button className="mt-[16px]" onClick={handleSubmit}>
+                Login
+              </Button>
+            </div>
           </div>
         </div>
       </div>
