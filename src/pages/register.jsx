@@ -5,7 +5,7 @@ import PasswordForm from "../components/passwordForm";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function Register() {
   const [formValues, setFormValues] = useState({
     username: "",
     password: "",
@@ -41,8 +41,8 @@ export default function Login() {
     }
   };
 
-  const handleRegisterNavigation = () => {
-    navigate("/register");
+  const handleLoginNavigation = () => {
+    navigate("/login");
   };
 
   return (
@@ -51,16 +51,16 @@ export default function Login() {
       <div className="w-full md:w-1/2 flex items-center justify-center">
         <div className="content flex w-full md:w-[50%]  h-auto flex-col items-center gap-[37px]">
           <p className="flex flex-col items-center text-center text-26-700">
-            Login
-            <button
-              className="text-14-500"
-              onClick={handleRegisterNavigation}
-            >
-              or create an <span className="underline">account</span>
+            Sign Up
+            <button className="text-14-500" onClick={handleLoginNavigation}>
+              you have an account?
+              <span className="underline">Login</span>
             </button>
           </p>
           <div className="form w-full flex flex-col gap-[16px]">
-            <FormItem label="Username" onChange={handleUsernameChange} placeholder="Enter your email" />
+            <FormItem label="Email" onChange={handleUsernameChange} placeholder="anton@gmail.com" />
+            <FormItem label="Username" onChange={handleUsernameChange} placeholder="altopmantop" />
+
             <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
             <div className="flex flex-col gap-[8px] w-full">
               {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red-500">{error}</p>}
