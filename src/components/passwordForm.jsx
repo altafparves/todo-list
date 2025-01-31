@@ -15,7 +15,7 @@ export default function PasswordForm({ label, placeholder, onChange, inputRef, r
 
   return (
     <div className="form w-full flex-col flex items-start gap-[8px]" {...props}>
-      <label className="text-black text-14-700">{label}</label>
+      <label className="text-secondary-text text-14-700">{label}</label>
       <div className="relative w-full">
         <input
           rows={rows}
@@ -23,10 +23,10 @@ export default function PasswordForm({ label, placeholder, onChange, inputRef, r
           onChange={handleInputChange}
           placeholder={placeholder}
           type={showPassword ? "text" : "password"}
-          className="appearance-none rounded-[12px] w-full bg-secondary p-[14px] text-grey leading-tight focus:outline-none focus:shadow-outline"
+          className="appearance-none rounded-[12px] w-full bg-button p-[14px] text-grey leading-tight focus:outline-none focus:shadow-outline"
         />
         <button type="button" className="absolute top-1/2 right-4 transform -translate-y-1/2" onClick={handleTogglePasswordVisibility}>
-          {showPassword ?   <IoEyeSharp /> :  <IoEyeOffSharp />}
+          {showPassword ? <IoEyeSharp color="#828282" /> : <IoEyeOffSharp color="#828282" />}
         </button>
       </div>
     </div>

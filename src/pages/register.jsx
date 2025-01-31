@@ -50,11 +50,11 @@ export default function Register() {
       <div className="hidden h-full md:flex w-1/2 rounded-[12px] bg-grey">adads</div>
       <div className="w-full md:w-1/2 flex items-center justify-center">
         <div className="content flex w-full md:w-[50%]  h-auto flex-col items-center gap-[37px]">
-          <p className="flex flex-col items-center text-center text-26-700">
+          <p className="flex flex-col items-center text-center text-text text-26-700">
             Sign Up
             <button className="text-14-500" onClick={handleLoginNavigation}>
-              you have an account?
-              <span className="underline">Login</span>
+              you have an account? 
+              <span className="underline ml-[3px]">Login</span>
             </button>
           </p>
           <div className="form w-full flex flex-col gap-[16px]">
@@ -63,9 +63,9 @@ export default function Register() {
 
             <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
             <div className="flex flex-col gap-[8px] w-full">
-              {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red-500">{error}</p>}
+              {error && <p className="mt-[3px]  pl-[14px] text-11-400 text-red">{error}</p>}
               <Button className="mt-[16px]" onClick={handleSubmit}>
-                Login
+                Register
               </Button>
             </div>
           </div>

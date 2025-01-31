@@ -50,7 +50,7 @@ export default function Login() {
       <div className="hidden h-full md:flex w-1/2 rounded-[12px] bg-grey">adads</div>
       <div className="w-full md:w-1/2 flex items-center justify-center">
         <div className="content flex w-full md:w-[50%]  h-auto flex-col items-center gap-[37px]">
-          <p className="flex flex-col items-center text-center text-26-700">
+          <p className="flex flex-col items-center text-text text-center text-26-700">
             Login
             <button
               className="text-14-500"
