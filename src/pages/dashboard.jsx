@@ -13,7 +13,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (token) {
-      dispatch(getTasksAsync(token)); // Fetch tasks on mount
+      dispatch(getTasksAsync({ token }));
     }
   }, [dispatch, token]);
 

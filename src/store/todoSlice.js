@@ -25,9 +25,10 @@ export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ titl
   }
 });
 
-export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async (token, { rejectWithValue }) => {
+
+export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ token, search = "" }, { rejectWithValue }) => {
   try {
-    const response = await fetch("https://todo-app-project-indol.vercel.app/todos", {
+    const response = await fetch(`https://todo-app-project-indol.vercel.app/todos${search ? `?search=${search}` : ""}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -35,8 +36,8 @@ export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async (toke
     });
 
     if (!response.ok) {
-      const errorData = await response.json(); // Improved error handling
-      throw new Error(errorData.message || "Failed to fetch tasks"); // Use server message or default
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch tasks");
     }
 
     const data = await response.json();
