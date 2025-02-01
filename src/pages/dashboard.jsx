@@ -2,46 +2,52 @@ import Filter from "../components/Filter";
 import Task from "../components/task";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { useState } from "react";
-import { useEffect } from "react";
-import { addTodoAsync,getTasksAsync } from "../store/todoSlice";
+import { useState, useEffect } from "react";
+import { addTodoAsync, getTasksAsync } from "../store/todoSlice";
+
 const Dashboard = () => {
-//    
-const dispatch = useDispatch();
-const [taskTitle, setTaskTitle] = useState("");
-const { loading, todos } = useSelector((state) => state.todos);
-const token = useSelector((state) => state.auth.token);
+  const dispatch = useDispatch();
+  const [taskTitle, setTaskTitle] = useState("");
+  const { loading, todos } = useSelector((state) => state.todos);
+  const token = useSelector((state) => state.auth.token);
 
-useEffect(() => {
-  if (token) {
-    dispatch(getTasksAsync(token)); // Fetch tasks on mount
-  }
-}, [dispatch, token]);
+  useEffect(() => {
+    if (token) {
+      dispatch(getTasksAsync(token)); // Fetch tasks on mount
+    }
+  }, [dispatch, token]);
 
-const handleCreateTask = async () => {
-  if (!taskTitle.trim()) return;
-  await dispatch(addTodoAsync({ title: taskTitle, token }));
-  setTaskTitle("");
-};
-
+  const handleCreateTask = async () => {
+    if (!taskTitle.trim()) return;
+    await dispatch(addTodoAsync({ title: taskTitle, token }));
+    setTaskTitle("");
+  };
 
   return (
     <>
       <div className="relative w-full h-full overflow-auto scroll-smooth">
-        {/* <DashboardLayout> */}
-        <section className=" mb-[25vh]  flex flex-col justify-start h-full pt-[30px] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]">
+        <section className={`flex  flex-col justify-start h-full pt-[30px] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]`}>
           {/* header */}
           <div className="header w-full flex flex-row justify-between mb-[30px]">
             <p className="text-page-title text-white">All</p>
             <p className="text-page-title text-white">{todos.length}</p>
           </div>
-          <Filter></Filter>
+          <Filter />
           {/* Render task list */}
-          {loading ? <p>Loading tasks...</p> : todos.length > 0 ? todos.map((task) => <Task key={task.todo_id} task={task} />) : <p>No tasks available</p>}
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <div className="w-10 h-10 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+            </div>
+          ) : todos.length > 0 ? (
+            todos.map((task) => <Task key={task.todo_id} task={task} />)
+          ) : (
+            <p>No tasks available</p>
+          )}
         </section>
-        {/* create new task */}
-        <div className="fixed bottom-0 w-[calc(100%-255px)] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]  h-auto">
-          <div className="w-full  px-[10px] py-[16px] flex flex-row justify-between items-center bg-button rounded-t-[16px]">
+
+        {/* Create new task */}
+        <div className="fixed bottom-0 w-[calc(100%-255px)] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px] h-auto">
+          <div className="w-full px-[10px] py-[16px] flex flex-row justify-between items-center bg-button rounded-t-[16px]">
             <input
               type="text"
               className="text-16-500 w-[80%] appearance-none bg-inherit text-text leading-tight focus:outline-none focus:shadow-outline"
@@ -58,6 +64,5 @@ const handleCreateTask = async () => {
     </>
   );
 };
-
 
 export default Dashboard;
