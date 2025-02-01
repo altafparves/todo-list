@@ -1,52 +1,54 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const initialState = {
-  todos: [],
-  loading: false,
-  error: null,
-  filters: {
-    category: "all",
-    priority: "all",
-    status: "all",
-  },
-  sortBy: "date",
-};
+export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ title, token }, { rejectWithValue }) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/todos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add task");
+    }
+
+    const data = await response.json();
+    return data; // Return the new task
+  } catch (error) {
+    return rejectWithValue(error.message);
+  }
+});
 
 const todoSlice = createSlice({
   name: "todos",
-  initialState,
+  initialState: {
+    todos: [],
+    loading: false,
+    error: null,
+  },
   reducers: {
-    setLoading: (state, action) => {
-      state.loading = action.payload;
-    },
-    setError: (state, action) => {
-      state.error = action.payload;
-      state.loading = false;
-    },
     setTodos: (state, action) => {
       state.todos = action.payload;
-      state.loading = false;
     },
-    addTodo: (state, action) => {
-      state.todos.push(action.payload);
-    },
-    updateTodo: (state, action) => {
-      const index = state.todos.findIndex((todo) => todo.id === action.payload.id);
-      if (index !== -1) {
-        state.todos[index] = action.payload;
-      }
-    },
-    deleteTodo: (state, action) => {
-      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
-    },
-    setFilters: (state, action) => {
-      state.filters = { ...state.filters, ...action.payload };
-    },
-    setSortBy: (state, action) => {
-      state.sortBy = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addTodoAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addTodoAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.todos.push(action.payload);
+      })
+      .addCase(addTodoAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-export const { setLoading, setError, setTodos, addTodo, updateTodo, deleteTodo, setFilters, setSortBy } = todoSlice.actions;
+export const { setTodos } = todoSlice.actions;
 export default todoSlice.reducer;

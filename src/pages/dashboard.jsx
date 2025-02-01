@@ -1,7 +1,25 @@
-import FilterButton from "../components/FilterButton";
-import { FaRegCalendarCheck } from "react-icons/fa6";
+import Filter from "../components/Filter";
 import Task from "../components/task";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { addTodoAsync } from "../store/todoSlice";
 const Dashboard = () => {
+   const dispatch = useDispatch();
+   const [taskTitle, setTaskTitle] = useState("");
+   const { loading } = useSelector((state) => state.todos);
+   const token = useSelector((state) => state.auth.token); 
+
+   const handleCreateTask = async () => {
+     if (!taskTitle.trim()) return;
+     const newTask = {
+       title: taskTitle,
+     };
+     await dispatch(addTodoAsync({ title: newTask.title, token })); // Pass title and token
+     setTaskTitle("");
+   };
+
+
   return (
     <>
       {/* <DashboardLayout> */}
@@ -11,25 +29,21 @@ const Dashboard = () => {
           <p className="text-page-title text-white">All</p>
           <p className="text-page-title text-white">30</p>
         </div>
-        {/* filter */}
-        <div className="w-full flex flex-col items-start gap-[12px]">
-          <div className="w-full pb-[] flex justify-between border-b-2 border-button">
-            <button className="text-14-400 border-b-2 border-blue text-text py-[8px] px-[12px]">List</button>
-            {/* filter */}
-            <FilterButton></FilterButton>
-          </div>
-          {/* filter chips */}
-          <div className="flex flex-row w-fit items-center gap-[8px] justify-start">
-            <p className="text-secondary-text pr-[8px] text-14-500">Filter: </p>
-            <div className="rounded-full w-fit bg-button text-12-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">
-              <FaRegCalendarCheck className="text-lg" />
-              01/12/2025
-            </div>
-          </div>
-        </div>
-        {/* task */}
+        <Filter></Filter>
         <Task></Task>
-        <button className="fixed bottom-[40px] left-[50%] bg-white rounded-full py-[16px] px-[32px]">+ Add Task</button>
+        {/* create new task */}
+        <div className="w-full absolute left-0 right-50 bottom-16 px-[10px] py-[16px] flex flex-row justify-between items-center bg-button rounded-t-[16px]">
+          <input
+            type="text"
+            className="text-16-500 w-[80%] appearance-none bg-inherit  text-text leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Create a new Task"
+            value={taskTitle}
+            onChange={(e) => setTaskTitle(e.target.value)}
+          />
+          <button className="bg-blue rounded-full text-16-700 text-text py-[16px] px-[32px]" onClick={handleCreateTask}>
+            {loading ? "Creating..." : "Create +"}
+          </button>
+        </div>
       </section>
     </>
   );
