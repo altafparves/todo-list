@@ -12,7 +12,7 @@ import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import NotFound from "./pages/notfound";
 // Layout
-import DashboardLayout from "./layout/DashboardLayout";
+import MainLayout from "./layout/MainLayout";
 
 function App() {
   return (
@@ -23,19 +23,17 @@ function App() {
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
-            <Route element={<DashboardLayout />}>
-              {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-              {/* Add more protected routes here */}
+            <Route element={<MainLayout />}>
+              <Route index element={<Dashboard />} />
             </Route>
           </Route>
 
           {/* Redirect root to dashboard or login based on auth status */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<Navigate to="/" replace />} />
 
           {/* 404 Route */}
           <Route path="*" element={<NotFound />} />

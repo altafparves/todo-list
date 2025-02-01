@@ -11,17 +11,22 @@ export const useAuth = () => {
   useEffect(() => {
     // Check for stored token on mount
     const token = localStorage.getItem("token");
-    if (token) {
-      // Validate token here if needed
-      const userData = JSON.parse(localStorage.getItem("user"));
-      dispatch(loginSuccess({ user: userData, token }));
+    const userData = localStorage.getItem("user");
+
+    if (token && userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        dispatch(loginSuccess({ user: parsedUser, token }));
+      } catch (error) {
+        console.error("Failed to parse user data:", error);
+        localStorage.removeItem("user"); // Clear invalid data
+      }
     }
   }, [dispatch]);
 
   const handleLogin = async (credentials) => {
     try {
-      // Add your login API call here
-      const response = await fetch("/api/login", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,17 +37,21 @@ export const useAuth = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        dispatch(loginSuccess(data));
-        navigate("/dashboard");
+        if (!data.datas) throw new Error("Invalid user data");
+
+        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("user", JSON.stringify(data.datas));
+        dispatch(loginSuccess({ user: data.datas, token: data.accessToken }));
+        navigate("/");
       } else {
         throw new Error(data.message);
       }
     } catch (error) {
+      console.error("Login Error:", error);
       throw error;
     }
   };
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -51,11 +60,35 @@ export const useAuth = () => {
     navigate("/login");
   };
 
+  const handleRegister = async (userData) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigate("/login");
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
   return {
     isAuthenticated,
     user,
     login: handleLogin,
     logout: handleLogout,
+    register: handleRegister,
   };
 };
 

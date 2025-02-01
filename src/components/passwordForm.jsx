@@ -9,9 +9,6 @@ export default function PasswordForm({ label, placeholder, onChange, inputRef, r
     setShowPassword(!showPassword);
   };
 
-  const handleInputChange = (event) => {
-    onChange && onChange(event);
-  };
 
   return (
     <div className="form w-full flex-col flex items-start gap-[8px]" {...props}>
@@ -20,7 +17,7 @@ export default function PasswordForm({ label, placeholder, onChange, inputRef, r
         <input
           rows={rows}
           ref={inputRef}
-          onChange={handleInputChange}
+          onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           type={showPassword ? "text" : "password"}
           className="appearance-none rounded-[12px] w-full bg-button p-[14px] text-grey leading-tight focus:outline-none focus:shadow-outline"

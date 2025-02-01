@@ -7,37 +7,43 @@ import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [formValues, setFormValues] = useState({
-    username: "",
-    password: "",
+    "username": "",
+    "email": "",
+   "password": "",
   });
 
   const [error, setError] = useState(null);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleUsernameChange = (value) => {
     setFormValues((prev) => ({
       ...prev,
-      username: value,
+      "username": value,
+    }));
+  };
+  const handleEmailChange = (value) => {
+    setFormValues((prev) => ({
+      ...prev,
+      "email": value,
     }));
   };
 
   const handlePasswordChange = (value) => {
     setFormValues((prev) => ({
       ...prev,
-      password: value,
+      "password": value,
     }));
   };
-    console.log(formValues);
 
 
   const handleSubmit = async () => {
+    console.log(formValues);
     try {
-      setError(null); // Reset error state
-      await login(formValues); // Call the login function
-      console.log(formValues);
+      setError(null);
+      await register(formValues); 
     } catch (err) {
-      setError(err.message); // Set error message if login fails
+      setError(err.message); 
     }
   };
 
@@ -58,7 +64,7 @@ export default function Register() {
             </button>
           </p>
           <div className="form w-full flex flex-col gap-[16px]">
-            <FormItem label="Email" onChange={handleUsernameChange} placeholder="anton@gmail.com" />
+            <FormItem label="Email" onChange={handleEmailChange} placeholder="anton@gmail.com" />
             <FormItem label="Username" onChange={handleUsernameChange} placeholder="altopmantop" />
 
             <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
@@ -68,7 +74,7 @@ export default function Register() {
                 Register
               </Button>
             </div>
-          </div>
+          </div>f
         </div>
       </div>
     </section>

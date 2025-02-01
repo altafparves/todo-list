@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [formValues, setFormValues] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -15,10 +15,10 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleUsernameChange = (value) => {
+  const handleEmailChange = (value) => {
     setFormValues((prev) => ({
       ...prev,
-      username: value,
+      email: value,
     }));
   };
 
@@ -33,7 +33,7 @@ export default function Login() {
 
   const handleSubmit = async () => {
     try {
-      setError(null); // Reset error state
+      setError(null); 
       await login(formValues); // Call the login function
       console.log(formValues);
     } catch (err) {
@@ -60,7 +60,7 @@ export default function Login() {
             </button>
           </p>
           <div className="form w-full flex flex-col gap-[16px]">
-            <FormItem label="Username" onChange={handleUsernameChange} placeholder="Enter your email" />
+            <FormItem label="Username" onChange={handleEmailChange} placeholder="Enter your email" />
             <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
             <div className="flex flex-col gap-[8px] w-full">
               {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red-500">{error}</p>}
