@@ -27,9 +27,9 @@ const handleCreateTask = async () => {
 
   return (
     <>
-      <div className="relative w-full">
+      <div className="relative w-full h-full overflow-auto scroll-smooth">
         {/* <DashboardLayout> */}
-        <section className="overflow-y-auto  flex flex-col justify-start h-full pt-[30px] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]">
+        <section className=" mb-[25vh]  flex flex-col justify-start h-full pt-[30px] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]">
           {/* header */}
           <div className="header w-full flex flex-row justify-between mb-[30px]">
             <p className="text-page-title text-white">All</p>
