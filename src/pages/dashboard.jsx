@@ -3,21 +3,26 @@ import Task from "../components/task";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { addTodoAsync } from "../store/todoSlice";
+import { useEffect } from "react";
+import { addTodoAsync,getTasksAsync } from "../store/todoSlice";
 const Dashboard = () => {
-   const dispatch = useDispatch();
-   const [taskTitle, setTaskTitle] = useState("");
-   const { loading } = useSelector((state) => state.todos);
-   const token = useSelector((state) => state.auth.token); 
+//    
+const dispatch = useDispatch();
+const [taskTitle, setTaskTitle] = useState("");
+const { loading, todos } = useSelector((state) => state.todos);
+const token = useSelector((state) => state.auth.token);
 
-   const handleCreateTask = async () => {
-     if (!taskTitle.trim()) return;
-     const newTask = {
-       title: taskTitle,
-     };
-     await dispatch(addTodoAsync({ title: newTask.title, token })); // Pass title and token
-     setTaskTitle("");
-   };
+useEffect(() => {
+  if (token) {
+    dispatch(getTasksAsync(token)); // Fetch tasks on mount
+  }
+}, [dispatch, token]);
+
+const handleCreateTask = async () => {
+  if (!taskTitle.trim()) return;
+  await dispatch(addTodoAsync({ title: taskTitle, token }));
+  setTaskTitle("");
+};
 
 
   return (
@@ -27,10 +32,11 @@ const Dashboard = () => {
         {/* header */}
         <div className="header w-full flex flex-row justify-between mb-[30px]">
           <p className="text-page-title text-white">All</p>
-          <p className="text-page-title text-white">30</p>
+          <p className="text-page-title text-white">{todos.length}</p>
         </div>
         <Filter></Filter>
-        <Task></Task>
+        {/* Render task list */}
+        {loading ? <p>Loading tasks...</p> : todos.length > 0 ? todos.map((task) => <Task key={task.todo_id} task={task} />) : <p>No tasks available</p>}
         {/* create new task */}
         <div className="w-full absolute left-0 right-50 bottom-16 px-[10px] py-[16px] flex flex-row justify-between items-center bg-button rounded-t-[16px]">
           <input
