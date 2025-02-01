@@ -163,7 +163,7 @@ export default function Filter() {
 
             {showCompletionMenu && (
               <div className="absolute top-12 left-1/2 w-full transform -translate-x-1/2 bg-button p-2 rounded-lg shadow-lg z-50">
-                {["Not started", "On progress", "Done"].map((status) => (
+                {["not started", "in progress", "done"].map((status) => (
                   <button key={status} className="block text-text  w-full text-left px-4 py-2 text-14-500 hover:bg-secondary rounded-[12px]" onClick={() => handleCompletionSelect(status)}>
                     {status}
                   </button>

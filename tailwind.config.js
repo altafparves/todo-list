@@ -11,6 +11,7 @@ module.exports = {
         "task-note": ["15px", { fontWeight: "400" }],
         "16-700": ["16px", { fontWeight: "700" }],
         "16-500": ["16px", { fontWeight: "500" }],
+        "15-700": ["15px", { fontWeight: "700" }],
         "14-700": ["14px", { fontWeight: "700" }],
         "14-500": ["14px", { fontWeight: "500" }],
         "14-400": ["14px", { fontWeight: "400" }],

@@ -5,7 +5,7 @@ import { IoMenu } from "react-icons/io5";
 import { Outlet } from "react-router-dom";
 
 
-const MainLayout = ({ children }) => {
+const MainLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -19,7 +19,7 @@ const MainLayout = ({ children }) => {
           <div className="px-[12px]  md:px-[28px] justify-start md:justify-center flex flex-row items-center border-button border-b-2 w-full h-[64px]">
             <Search />
           </div>
-          <section className="px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px] h-full flex-1 overflow-auto">
+          <section className="h-full flex-1 overflow-hidden">
             <Outlet />
           </section>
         </div>
@@ -33,3 +33,6 @@ const MainLayout = ({ children }) => {
 };
 
 export default MainLayout;
+
+
+
