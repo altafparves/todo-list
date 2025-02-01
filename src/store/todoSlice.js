@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ title, token }, { rejectWithValue }) => {
+export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ title, token }, { rejectWithValue,dispatch }) => {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/todos`, {
       method: "POST",
@@ -15,6 +15,8 @@ export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ titl
       const errorData = await response.json(); // Improved error handling
       throw new Error(errorData.message || "Failed to add task"); // Use server message or default
     }
+    dispatch(getTasksAsync(token));
+
 
     const data = await response.json();
     return data;
@@ -64,28 +66,6 @@ export const deleteTodoAsync = createAsyncThunk("todos/deleteTodoAsync", async (
   }
 });
 
-// export const editTodoAsync = createAsyncThunk("todos/editTodoAsync", async ({ todo_id, updates, token }, { rejectWithValue }) => {
-//   try {
-//     const response = await fetch(`https://todo-app-project-indol.vercel.app/todos/${todo_id}`, {
-//       method: "PUT",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//       body: JSON.stringify(updates),
-//     });
-
-//     if (!response.ok) {
-//       const errorData = await response.json(); // Improved error handling
-//       throw new Error(errorData.message || "Failed to update task"); // Use server message or default
-//     }
-
-//     const data = await response.json(); // Assuming your server returns the updated task
-//     return data; // Return the updated task data
-//   } catch (error) {
-//     return rejectWithValue(error.message);
-//   }
-// });
 
 export const editTodoAsync = createAsyncThunk("todos/editTodoAsync", async ({ todo_id, updates, token }, { rejectWithValue, dispatch }) => {
   try {
@@ -165,9 +145,9 @@ const todoSlice = createSlice({
       })
       .addCase(editTodoAsync.fulfilled, (state, action) => {
         state.loading = false;
-        const updatedTodo = action.payload; // The entire updated todo object
+        const updatedTodo = action.payload; 
         state.todos = state.todos.map(
-          (todo) => (todo.todo_id === updatedTodo.todo_id ? updatedTodo : todo) // Update the todo in the array
+          (todo) => (todo.todo_id === updatedTodo.todo_id ? updatedTodo : todo) 
         );
       })
       .addCase(editTodoAsync.rejected, (state, action) => {
