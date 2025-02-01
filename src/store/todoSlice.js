@@ -83,34 +83,3 @@ const todoSlice = createSlice({
 
 export const { setTodos } = todoSlice.actions;
 export default todoSlice.reducer;
-
-// const todoSlice = createSlice({
-//   name: "todos",
-//   initialState: {
-//     todos: [],
-//     loading: false,
-//     error: null,
-//   },
-//   reducers: {
-//     setTodos: (state, action) => {
-//       state.todos = action.payload;
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(addTodoAsync.pending, (state) => {
-//         state.loading = true;
-//       })
-//       .addCase(addTodoAsync.fulfilled, (state, action) => {
-//         state.loading = false;
-//         state.todos.push(action.payload);
-//       })
-//       .addCase(addTodoAsync.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload;
-//       });
-//   },
-// });
-
-// export const { setTodos } = todoSlice.actions;
-// export default todoSlice.reducer;

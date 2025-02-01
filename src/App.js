@@ -11,6 +11,8 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import NotFound from "./pages/notfound";
+import HighPriority from "./pages/HighPriority";
+import Completed from "./pages/Completed";
 // Layout
 import MainLayout from "./layout/MainLayout";
 
@@ -29,6 +31,8 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route element={<MainLayout />}>
               <Route index element={<Dashboard />} />
+              <Route path="/high-priority" element={<HighPriority />} /> 
+              <Route path="/completed" element={<Completed />} /> 
             </Route>
           </Route>
 
