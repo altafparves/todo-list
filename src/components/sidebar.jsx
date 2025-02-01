@@ -27,10 +27,11 @@ export default function Sidebar({ isOpen, className }) {
     >
       <div className="flex flex-col gap-[8px]">
         <div className="flex w-full flex-col gap-[10px]">
-          <MenuItems name="All" path="/" isActive={activeMenu === "/"} color={activeMenu === "/" ? "bg-blue" : ""} onClick={() => handleMenuClick("/")} />
-          
-          <MenuItems name="High Priority" path="/high-priority" isActive={activeMenu === "/high-priority"} color={activeMenu === "/high-priority" ? "bg-red" : ""} onClick={() => handleMenuClick("/high-priority")} />
-          <MenuItems name="Completed" path="/completed" isActive={activeMenu === "/completed"} color={activeMenu === "/completed" ? "bg-grey" : ""} onClick={() => handleMenuClick("/completed")} />
+          <MenuItems name="All" path="/" isActive={activeMenu === "/"} color="bg-blue" onClick={() => handleMenuClick("/")}/>
+    
+
+          <MenuItems name="High Priority" path="/high-priority" isActive={activeMenu === "/high-priority"} color="bg-red" onClick={() => handleMenuClick("/high-priority")} />
+          <MenuItems name="Completed" path="/completed" isActive={activeMenu === "/completed"} color="bg-grey" onClick={() => handleMenuClick("/completed")} />
         </div>
       </div>
       <div className="w-full gap-[8px] items-center border border-button flex flex-col p-[12px] rounded-[6px]">
