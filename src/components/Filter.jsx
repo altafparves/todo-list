@@ -8,7 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export default function Filter() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateFilterActive, setDateFilterActive] = useState(false);
 
@@ -18,14 +19,19 @@ export default function Filter() {
   const [completionFilter, setCompletionFilter] = useState(null);
   const [showCompletionMenu, setShowCompletionMenu] = useState(false);
 
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
-    setShowDatePicker(false);
-    setDateFilterActive(true);
+  console.log("selected filter",selectedDateRange,priorityFilter,completionFilter);
+
+  const handleDateSelect = (dates) => {
+    const [start, end] = dates;
+    setSelectedDateRange([start, end]);
+    if (start && end) {
+      setShowDatePicker(false); 
+      setDateFilterActive(true); 
+    }
   };
 
   const handleRemoveDateFilter = () => {
-    setSelectedDate(null);
+    setSelectedDateRange([null, null]);
     setDateFilterActive(false);
     setShowDatePicker(false);
   };
@@ -51,10 +57,9 @@ export default function Filter() {
   };
 
   return (
-    <div className="w-full flex flex-col items-start gap-[12px]">
+    <div className="w-full flex flex-col items-start gap-[12px] mb-[12px]">
       <div className="w-full pb-2 flex justify-between border-b-2 border-button">
         <button className="text-14-400 border-b-2 border-blue text-text py-[8px] px-[12px]">List</button>
-
         {/* Filter */}
         <div className="relative inline-block">
           <button className="flex items-center mb-2 flex-row gap-2 text-white bg-button px-4 py-2 text-sm font-medium rounded-lg" onClick={() => setIsOpen(!isOpen)}>
@@ -111,19 +116,20 @@ export default function Filter() {
         <p className="text-secondary-text pr-[8px] text-14-500">Filter: </p>
 
         {/* Date Picker Chip */}
+
         {dateFilterActive && (
           <div className="relative">
             <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowDatePicker(!showDatePicker)}>
               <FaRegCalendarCheck className="text-lg" />
-              {selectedDate ? selectedDate.toLocaleDateString("en-GB") : "Pick a Date"}
+              {selectedDateRange[0] && selectedDateRange[1] ? `${selectedDateRange[0].toLocaleDateString("en-GB")} - ${selectedDateRange[1].toLocaleDateString("en-GB")}` : "Pick a Date Range"}
               <button onClick={handleRemoveDateFilter}>
-                <ImCancelCircle className="text-red-500 text-lg" />
+                <ImCancelCircle className="text-red-500 text-md" />
               </button>
             </button>
 
             {showDatePicker && (
               <div className="absolute top-12 left-2/3 transform -translate-x-1/2 bg-button p-4 rounded-lg shadow-lg z-50">
-                <DatePicker selected={selectedDate} onChange={handleDateSelect} inline />
+                <DatePicker selectsRange startDate={selectedDateRange[0]} endDate={selectedDateRange[1]} onChange={handleDateSelect} inline />
               </div>
             )}
           </div>
@@ -135,7 +141,7 @@ export default function Filter() {
             <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowPriorityMenu(!showPriorityMenu)}>
               Priority: {priorityFilter}
               <button onClick={handleRemovePriorityFilter}>
-                <ImCancelCircle className="text-red-500 text-lg" />
+                <ImCancelCircle className="text-red-500 text-md" />
               </button>
             </button>
 
@@ -157,7 +163,7 @@ export default function Filter() {
             <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowCompletionMenu(!showCompletionMenu)}>
               Status: {completionFilter}
               <button onClick={handleRemoveCompletionFilter}>
-                <ImCancelCircle className="text-red-500 text-lg" />
+                <ImCancelCircle className="text-red-500 text-md" />
               </button>
             </button>
 
