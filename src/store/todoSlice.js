@@ -91,13 +91,16 @@ export const deleteTodoAsync = createAsyncThunk("todos/deleteTodoAsync", async (
 });
 
 
-export const editTodoAsync = createAsyncThunk("todos/editTodoAsync", async ({ todo_id, updates, token }, { rejectWithValue, dispatch }) => {
+export const editTodoAsync = createAsyncThunk("todos/editTodoAsync", async ({ todo_id, updates }, { rejectWithValue, dispatch, getState }) => {
+  // Access getState
   try {
+    const token = getState().auth.token; // Get current token from state
+
     const response = await fetch(`https://todo-app-project-indol.vercel.app/todos/${todo_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, // Use the token from getState
       },
       body: JSON.stringify(updates),
     });
@@ -109,14 +112,15 @@ export const editTodoAsync = createAsyncThunk("todos/editTodoAsync", async ({ to
 
     const data = await response.json();
 
-    // Refetch tasks after successful update
-    dispatch(getTasksAsync(token));
+    // Refetch tasks using the current token
+    dispatch(getTasksAsync({ token })); // Pass token as an object
 
-    return data; // Return the updated task data
+    return data;
   } catch (error) {
     return rejectWithValue(error.message);
   }
 });
+
 const todoSlice = createSlice({
   name: "todos",
   initialState: {
