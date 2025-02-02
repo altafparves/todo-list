@@ -2,26 +2,56 @@ import Filter from "../components/Filter";
 import Task from "../components/task";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useCallback } from "react";
 import { addTodoAsync, getTasksAsync } from "../store/todoSlice";
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  const [taskTitle, setTaskTitle] = useState("");
-  const { loading, todos } = useSelector((state) => state.todos);
-  const token = useSelector((state) => state.auth.token);
+const dispatch = useDispatch();
+const [taskTitle, setTaskTitle] = useState("");
+const { loading, todos } = useSelector((state) => state.todos);
+const token = useSelector((state) => state.auth.token);
 
-  useEffect(() => {
-    if (token) {
-      dispatch(getTasksAsync({ token }));
-    }
-  }, [dispatch, token]);
+// filter state
+const [priorityFilter, setPriorityFilter] = useState(null);
+const [completionFilter, setCompletionFilter] = useState(null);
+const [formattedDateRange, setFormattedDateRange] = useState({
+  start: null,
+  end: null,
+});
 
-  const handleCreateTask = async () => {
-    if (!taskTitle.trim()) return;
-    await dispatch(addTodoAsync({ title: taskTitle, token }));
-    setTaskTitle("");
-  };
+const fetchTasksWithFilters = useCallback(() => {
+  const filter = {}; // Start with an empty filter object
+
+  if (priorityFilter) {
+    // Check if priorityFilter has a value
+    filter.priority = priorityFilter;
+  }
+
+  if (completionFilter) {
+    // Check if completionFilter has a value (it can be true/false or null)
+    filter.is_complete = completionFilter;
+  }
+
+  if (formattedDateRange.start && formattedDateRange.end) {
+    // Check if both start and end dates are present
+    filter.start = formattedDateRange.start;
+    filter.end = formattedDateRange.end;
+  }
+
+  dispatch(getTasksAsync({ token, filter }));
+}, [dispatch, token, priorityFilter, completionFilter, formattedDateRange]);
+
+useEffect(() => {
+  if (token) {
+    fetchTasksWithFilters();
+  }
+}, [token, fetchTasksWithFilters]);
+
+const handleCreateTask = async () => {
+  if (!taskTitle.trim()) return;
+  await dispatch(addTodoAsync({ title: taskTitle, token }));
+  setTaskTitle("");
+};
 
   return (
     <>
@@ -32,7 +62,7 @@ const Dashboard = () => {
             <p className="text-page-title text-white">All</p>
             <p className="text-page-title text-white">{todos.length}</p>
           </div>
-          <Filter />
+          <Filter completionFilter={completionFilter} setCompletionFilter={setCompletionFilter} priorityFilter={priorityFilter} setPriorityFilter={setPriorityFilter} formattedDateRange={formattedDateRange} setFormattedDateRange={setFormattedDateRange} />
           {/* Render task list */}
           {loading ? (
             <div className="flex justify-center items-center">

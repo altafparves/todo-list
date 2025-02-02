@@ -6,27 +6,29 @@ import { ImCancelCircle } from "react-icons/im";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Filter() {
+export default function Filter({priorityFilter,setPriorityFilter,completionFilter,setCompletionFilter,formattedDateRange,setFormattedDateRange}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
-
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateFilterActive, setDateFilterActive] = useState(false);
-
-  const [priorityFilter, setPriorityFilter] = useState(null);
   const [showPriorityMenu, setShowPriorityMenu] = useState(false);
-
-  const [completionFilter, setCompletionFilter] = useState(null);
   const [showCompletionMenu, setShowCompletionMenu] = useState(false);
-
-  console.log("selected filter",selectedDateRange,priorityFilter,completionFilter);
-
+  const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
+  
   const handleDateSelect = (dates) => {
     const [start, end] = dates;
     setSelectedDateRange([start, end]);
+
     if (start && end) {
-      setShowDatePicker(false); 
-      setDateFilterActive(true); 
+      setShowDatePicker(false);
+      setDateFilterActive(true);
+      const formattedStart = start.toISOString().slice(0, 10);
+      const formattedEnd = end.toISOString().slice(0, 10);
+      setFormattedDateRange({ start: formattedStart, end: formattedEnd });
+    } else if (start) {
+      const formattedStart = start.toISOString().slice(0, 10);
+      setFormattedDateRange({ start: formattedStart, end: null });
+    } else {
+      setFormattedDateRange({ start: null, end: null });
     }
   };
 
@@ -34,6 +36,7 @@ export default function Filter() {
     setSelectedDateRange([null, null]);
     setDateFilterActive(false);
     setShowDatePicker(false);
+    setFormattedDateRange({ start: null, end: null });
   };
 
   const handlePrioritySelect = (priority) => {
@@ -98,7 +101,7 @@ export default function Filter() {
                   <button
                     className="p-2 w-full flex items-start text-text text-14-500 hover:text-14-700 hover:text-secondary hover:bg-gray-200 rounded-lg cursor-pointer"
                     onClick={() => {
-                      setCompletionFilter("Not started"); // Default value
+                      setCompletionFilter("not started"); // Default value
                       setIsOpen(false);
                     }}
                   >
@@ -117,11 +120,30 @@ export default function Filter() {
 
         {/* Date Picker Chip */}
 
-        {dateFilterActive && (
+        {/* {dateFilterActive && (
           <div className="relative">
             <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowDatePicker(!showDatePicker)}>
               <FaRegCalendarCheck className="text-lg" />
               {selectedDateRange[0] && selectedDateRange[1] ? `${selectedDateRange[0].toLocaleDateString("en-GB")} - ${selectedDateRange[1].toLocaleDateString("en-GB")}` : "Pick a Date Range"}
+              <button onClick={handleRemoveDateFilter}>
+                <ImCancelCircle className="text-red-500 text-md" />
+              </button>
+            </button>
+
+            {showDatePicker && (
+              <div className="absolute top-12 left-2/3 transform -translate-x-1/2 bg-button p-4 rounded-lg shadow-lg z-50">
+                <DatePicker selectsRange startDate={selectedDateRange[0]} endDate={selectedDateRange[1]} onChange={handleDateSelect} inline />
+              </div>
+            )}
+          </div>
+        )} */}
+        {dateFilterActive && (
+          <div className="relative">
+            <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowDatePicker(!showDatePicker)}>
+              <FaRegCalendarCheck className="text-lg" />
+              {selectedDateRange[0] && selectedDateRange[1]
+                ? `${formattedDateRange.start} - ${formattedDateRange.end}` // Display formatted dates
+                : "Pick a Date Range"}
               <button onClick={handleRemoveDateFilter}>
                 <ImCancelCircle className="text-red-500 text-md" />
               </button>

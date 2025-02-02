@@ -26,9 +26,31 @@ export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ titl
 });
 
 
-export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ token, search = "" }, { rejectWithValue }) => {
+export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ token, filter = {}, search = "" }, { rejectWithValue }) => {
   try {
-    const response = await fetch(`https://todo-app-project-indol.vercel.app/todos${search ? `?search=${search}` : ""}`, {
+    const params = new URLSearchParams();
+
+    if (filter.priority) {
+      params.append("priority", filter.priority);
+    }
+
+    if (filter.is_complete) {
+      params.append("is_complete", filter.is_complete);
+    }
+
+    if (filter.start && filter.end) {
+      params.append("start", filter.start);
+      params.append("end", filter.end);
+    }
+
+    if (search) {
+      params.append("search", search);
+    }
+
+    const queryString = params.toString();
+    const url = `https://todo-app-project-indol.vercel.app/todos${queryString ? `?${queryString}` : ""}`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,6 +68,7 @@ export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ to
     return rejectWithValue(error.message);
   }
 });
+
 
 export const deleteTodoAsync = createAsyncThunk("todos/deleteTodoAsync", async ({ todo_id, token }, { rejectWithValue }) => {
   try {
