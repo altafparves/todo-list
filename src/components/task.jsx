@@ -63,6 +63,15 @@ const handlePrioritySelect = (level) => {
   setShowTaskPriorityMenu(false); // Close Task's menu
 };
 
+// edit completion status
+const [showTaskCompletionMenu, setShowTaskCompletionMenu] = useState(false); 
+const [editCompletion, setEditCompletion] = useState(task.is_completed || "");
+const handleCompletionSelect = (status) => {
+  setEditCompletion(status);
+  dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: status }, token }));
+  setShowTaskCompletionMenu(false);
+};
+
 
 const handlers = useSwipeable({
   onSwipedLeft: () => handleDelete(),
@@ -147,7 +156,32 @@ useEffect(() => {
               {task.due_date}
             </div>
           )}
-          {task.is_completed && <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.is_completed}</div>}
+          {/* completion */}
+          {isEditing ? (
+            <div className="relative ml-[24px]">
+              <button
+                className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text"
+                onClick={() => setShowTaskCompletionMenu(!showTaskCompletionMenu)} // Toggle menu
+              >
+                {editCompletion ? editCompletion : "Add Status"} {/* Show status or "Add Status" */}
+              </button>
+
+              {showTaskCompletionMenu && (
+                <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-button p-2 rounded-lg shadow-lg z-50">
+                  {["not started", "in progress", "done"].map((status) => (
+                    <button key={status} className="block text-text w-full text-left px-4 py-2 text-14-500 hover:bg-secondary rounded-[12px]" onClick={() => handleCompletionSelect(status)}>
+                      {status}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            task.is_completed && ( 
+              <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.is_completed}</div>
+            )
+          )}
+
           {/* Priority */}
           {isEditing ? (
             <div className="relative ml-[24px]">
