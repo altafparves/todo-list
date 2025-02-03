@@ -17,23 +17,14 @@ const handleDelete = () => {
   dispatch(deleteTodoAsync({ todo_id: task.todo_id, token }));
 };
 
+// edit status from checkbox
 const handleComplete = () => {
   const newStatus = task.is_completed === "done" ? "not started" : "done";
   dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: newStatus }, token }));
 };
 
-const handleEditClick = () => {
-  setIsEditing(true);
-};
 
-const handleEditBlur = (e) => {
-  if (taskRef.current && !taskRef.current.contains(e.relatedTarget)) {
-    setIsEditing(false);
-    setEditTitle(task.title);
-    setEditDesc(task.description || "");
-  }
-};
-
+// edit title
 const debouncedEditTitle = useCallback(
   debounce((newTitle) => {
     dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { title: newTitle }, token }));
@@ -47,24 +38,31 @@ const handleEditTitleChange = (e) => {
   debouncedEditTitle(newTitle);
 };
 
+
+
+// edit desc
 const debouncedEditDesc = useCallback(
   debounce((newDesc) => {
     dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { description: newDesc }, token }));
   }, 500),
   [dispatch, token, task.todo_id]
 );
-
 const handleEditDescChange = (e) => {
   const newDesc = e.target.value;
   setEditDesc(newDesc);
   debouncedEditDesc(newDesc);
 };
 
-const handleKeyDown = (e) => {
-  if (e.key === "Enter") {
-    handleEditBlur(); 
-  }
+// edit priority
+const [showTaskPriorityMenu, setShowTaskPriorityMenu] = useState(false); 
+const [editPriority, setEditPriority] = useState(task.priority || ""); 
+
+const handlePrioritySelect = (level) => {
+  setEditPriority(level);
+  dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { priority: level }, token }));
+  setShowTaskPriorityMenu(false); // Close Task's menu
 };
+
 
 const handlers = useSwipeable({
   onSwipedLeft: () => handleDelete(),
@@ -72,6 +70,23 @@ const handlers = useSwipeable({
   trackMouse: true,
 });
 
+// handle edit
+const handleEditBlur = (e) => {
+  if (taskRef.current && !taskRef.current.contains(e.relatedTarget)) {
+    setIsEditing(false);
+    setEditTitle(task.title);
+    setEditDesc(task.description || "");
+  }
+};
+
+const handleKeyDown = (e) => {
+  if (e.key === "Enter") {
+    handleEditBlur();
+  }
+};
+const handleEditClick = () => {
+  setIsEditing(true);
+};
 
 useEffect(() => {
   const handleClickOutside = (event) => {
@@ -85,11 +100,6 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, []);
-
-
-
-
-console.log("ini isEditing",isEditing);
 
   return (
     <div {...handlers} className="task w-full">
@@ -138,10 +148,33 @@ console.log("ini isEditing",isEditing);
             </div>
           )}
           {task.is_completed && <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.is_completed}</div>}
-          {task.priority && <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.priority}</div>}
+          {/* Priority */}
+          {isEditing ? (
+            <div className="relative ml-[24px]">
+              <button
+                className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text"
+                onClick={() => setShowTaskPriorityMenu(!showTaskPriorityMenu)} // Use Task's state
+              >
+                {editPriority ? editPriority : "Add Priority"}
+              </button>
+
+              {showTaskPriorityMenu && ( // Use Task's state
+                <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-button p-2 rounded-lg shadow-lg z-50">
+                  {["High", "Medium", "Low"].map((level) => (
+                    <button key={level} className="block text-text w-full text-left px-4 py-2 text-14-500 hover:bg-secondary rounded-[12px]" onClick={() => handlePrioritySelect(level)}>
+                      {level}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            task.priority && <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.priority}</div>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
 
