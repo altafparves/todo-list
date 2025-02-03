@@ -13,7 +13,7 @@ export default function Filter({priorityFilter,setPriorityFilter,completionFilte
   const [showPriorityMenu, setShowPriorityMenu] = useState(false);
   const [showCompletionMenu, setShowCompletionMenu] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
-  
+
   const handleDateSelect = (dates) => {
     const [start, end] = dates;
     setSelectedDateRange([start, end]);
@@ -118,25 +118,6 @@ export default function Filter({priorityFilter,setPriorityFilter,completionFilte
       <div className="flex flex-row w-fit items-center gap-[8px] justify-start">
         <p className="text-secondary-text pr-[8px] text-14-500">Filter: </p>
 
-        {/* Date Picker Chip */}
-
-        {/* {dateFilterActive && (
-          <div className="relative">
-            <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowDatePicker(!showDatePicker)}>
-              <FaRegCalendarCheck className="text-lg" />
-              {selectedDateRange[0] && selectedDateRange[1] ? `${selectedDateRange[0].toLocaleDateString("en-GB")} - ${selectedDateRange[1].toLocaleDateString("en-GB")}` : "Pick a Date Range"}
-              <button onClick={handleRemoveDateFilter}>
-                <ImCancelCircle className="text-red-500 text-md" />
-              </button>
-            </button>
-
-            {showDatePicker && (
-              <div className="absolute top-12 left-2/3 transform -translate-x-1/2 bg-button p-4 rounded-lg shadow-lg z-50">
-                <DatePicker selectsRange startDate={selectedDateRange[0]} endDate={selectedDateRange[1]} onChange={handleDateSelect} inline />
-              </div>
-            )}
-          </div>
-        )} */}
         {dateFilterActive && (
           <div className="relative">
             <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowDatePicker(!showDatePicker)}>
