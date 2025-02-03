@@ -4,115 +4,125 @@ import { deleteTodoAsync, editTodoAsync } from "../store/todoSlice";
 import { useSwipeable } from "react-swipeable";
 import { useCallback, useState,useRef,useEffect } from "react";
 import debounce from "lodash/debounce";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 
 export default function Task({ task }) {
-const dispatch = useDispatch();
-const token = useSelector((state) => state.auth.token);
-const taskRef = useRef(null);
-const [isEditing, setIsEditing] = useState(false);
-const [editTitle, setEditTitle] = useState(task.title);
-const [editDesc, setEditDesc] = useState(task.description || "");
-const handleDelete = () => {
-  dispatch(deleteTodoAsync({ todo_id: task.todo_id, token }));
-};
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+  const taskRef = useRef(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.title);
+  const [editDesc, setEditDesc] = useState(task.description || "");
+  const handleDelete = () => {
+    dispatch(deleteTodoAsync({ todo_id: task.todo_id, token }));
+  };
 
-// edit status from checkbox
-const handleComplete = () => {
-  const newStatus = task.is_completed === "done" ? "not started" : "done";
-  dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: newStatus }, token }));
-};
+  // edit status from checkbox
+  const handleComplete = () => {
+    const newStatus = task.is_completed === "done" ? "not started" : "done";
+    dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: newStatus }, token }));
+  };
 
+  // edit title
+  const debouncedEditTitle = useCallback(
+    debounce((newTitle) => {
+      dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { title: newTitle }, token }));
+    }, 500),
+    [dispatch, token, task.todo_id]
+  );
 
-// edit title
-const debouncedEditTitle = useCallback(
-  debounce((newTitle) => {
-    dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { title: newTitle }, token }));
-  }, 500),
-  [dispatch, token, task.todo_id]
-);
+  const handleEditTitleChange = (e) => {
+    const newTitle = e.target.value;
+    setEditTitle(newTitle);
+    debouncedEditTitle(newTitle);
+  };
 
-const handleEditTitleChange = (e) => {
-  const newTitle = e.target.value;
-  setEditTitle(newTitle);
-  debouncedEditTitle(newTitle);
-};
+  // edit desc
+  const debouncedEditDesc = useCallback(
+    debounce((newDesc) => {
+      dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { description: newDesc }, token }));
+    }, 500),
+    [dispatch, token, task.todo_id]
+  );
+  const handleEditDescChange = (e) => {
+    const newDesc = e.target.value;
+    setEditDesc(newDesc);
+    debouncedEditDesc(newDesc);
+  };
 
+  // edit due date
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [editDueDate, setEditDueDate] = useState(task.due_date ? new Date(task.due_date) : null); // Store as Date object
 
+  const handleDateChange = (date) => {
+    setEditDueDate(date);
+    const formattedDate = date ? date.toLocaleDateString("en-CA", { year: "numeric", month: "2-digit", day: "2-digit" }) : null;
+    dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { due_date: formattedDate }, token }));
+    setShowDatePicker(false);
+  };
 
-// edit desc
-const debouncedEditDesc = useCallback(
-  debounce((newDesc) => {
-    dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { description: newDesc }, token }));
-  }, 500),
-  [dispatch, token, task.todo_id]
-);
-const handleEditDescChange = (e) => {
-  const newDesc = e.target.value;
-  setEditDesc(newDesc);
-  debouncedEditDesc(newDesc);
-};
+  // edit priority
+  const [showTaskPriorityMenu, setShowTaskPriorityMenu] = useState(false);
+  const [editPriority, setEditPriority] = useState(task.priority || "");
 
-// edit priority
-const [showTaskPriorityMenu, setShowTaskPriorityMenu] = useState(false); 
-const [editPriority, setEditPriority] = useState(task.priority || ""); 
+  const handlePrioritySelect = (level) => {
+    setEditPriority(level);
+    dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { priority: level }, token }));
+    setShowTaskPriorityMenu(false); // Close Task's menu
+  };
 
-const handlePrioritySelect = (level) => {
-  setEditPriority(level);
-  dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { priority: level }, token }));
-  setShowTaskPriorityMenu(false); // Close Task's menu
-};
+  // edit completion status
+  const [showTaskCompletionMenu, setShowTaskCompletionMenu] = useState(false);
+  const [editCompletion, setEditCompletion] = useState(task.is_completed || "");
+  const handleCompletionSelect = (status) => {
+    setEditCompletion(status);
+    dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: status }, token }));
+    setShowTaskCompletionMenu(false);
+  };
 
-// edit completion status
-const [showTaskCompletionMenu, setShowTaskCompletionMenu] = useState(false); 
-const [editCompletion, setEditCompletion] = useState(task.is_completed || "");
-const handleCompletionSelect = (status) => {
-  setEditCompletion(status);
-  dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: status }, token }));
-  setShowTaskCompletionMenu(false);
-};
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleDelete(),
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
 
-
-const handlers = useSwipeable({
-  onSwipedLeft: () => handleDelete(),
-  preventScrollOnSwipe: true,
-  trackMouse: true,
-});
-
-// handle edit
-const handleEditBlur = (e) => {
-  if (taskRef.current && !taskRef.current.contains(e.relatedTarget)) {
-    setIsEditing(false);
-    setEditTitle(task.title);
-    setEditDesc(task.description || "");
-  }
-};
-
-const handleKeyDown = (e) => {
-  if (e.key === "Enter") {
-    handleEditBlur();
-  }
-};
-const handleEditClick = () => {
-  setIsEditing(true);
-};
-
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (taskRef.current && !taskRef.current.contains(event.target)) {
+  // handle edit
+  const handleEditBlur = (e) => {
+    if (taskRef.current && !taskRef.current.contains(e.relatedTarget)) {
       setIsEditing(false);
+      setEditTitle(task.title);
+      setEditDesc(task.description || "");
     }
   };
 
-  document.addEventListener("mousedown", handleClickOutside);
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleEditBlur();
+    }
   };
-}, []);
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (taskRef.current && !taskRef.current.contains(event.target)) {
+        setIsEditing(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div {...handlers} className="task w-full">
-      <div onClick={handleEditClick} ref={taskRef} className="task ref={taskRef}  w-full border-b-1 transition duration-300 ease-in-out hover:bg-button border-button py-[12px] border-b flex flex-col gap-[8px]">
+      <div onClick={handleEditClick} ref={taskRef} className="task ref={taskRef}  w-full border-b-1 transition duration-300 ease-in-out hover:bg-secondary border-button py-[12px] border-b flex flex-col gap-[8px]">
         <div className="flex flex-row items-center w-full gap-[8px]">
           <input type="checkbox" className="form-radio h-4 w-4 text-blue-600" checked={task.is_completed === "done"} onChange={handleComplete} />
           <div className="w-full flex flex-row items-center">
@@ -150,12 +160,38 @@ useEffect(() => {
           )}
 
         <div className="w-full pl-[24px] flex-wrap flex gap-[8px]">
-          {task.due_date && (
+          {/* Due Date */}
+          {isEditing ? (
+            <div className="relative ml-[24px]">
+              <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowDatePicker(!showDatePicker)}>
+                <FaRegCalendarCheck className="text-lg" />
+                {editDueDate ? editDueDate.toLocaleDateString("en-GB") : "Add Date"}
+              </button>
+              {showDatePicker && (
+                <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-button p-2 rounded-lg shadow-lg z-50">
+                  <DatePicker
+                    selected={editDueDate}
+                    onChange={handleDateChange}
+                    dateFormat="dd/MM/yyyy" // Customize date format
+                    inline
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            task.due_date && (
+              <div className="rounded-full  w-fit bg-button text-12-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">
+                <FaRegCalendarCheck className="text-lg" />
+                {task.due_date}
+              </div>
+            )
+          )}
+          {/* {task.due_date && (
             <div className="rounded-full w-fit bg-button text-12-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">
               <FaRegCalendarCheck className="text-lg" />
               {task.due_date}
             </div>
-          )}
+          )} */}
           {/* completion */}
           {isEditing ? (
             <div className="relative ml-[24px]">
@@ -177,9 +213,7 @@ useEffect(() => {
               )}
             </div>
           ) : (
-            task.is_completed && ( 
-              <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.is_completed}</div>
-            )
+            task.is_completed && <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.is_completed}</div>
           )}
 
           {/* Priority */}
