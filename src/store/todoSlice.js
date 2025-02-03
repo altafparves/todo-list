@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ title, token }, { rejectWithValue,dispatch }) => {
+export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ title,token }, { rejectWithValue,dispatch }) => {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/todos`, {
       method: "POST",
@@ -15,7 +15,9 @@ export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ titl
       const errorData = await response.json(); // Improved error handling
       throw new Error(errorData.message || "Failed to add task"); // Use server message or default
     }
-    dispatch(getTasksAsync(token));
+    const filter = {};
+    dispatch(getTasksAsync({ token, filter }));
+
 
 
     const data = await response.json();
@@ -111,9 +113,9 @@ export const editTodoAsync = createAsyncThunk("todos/editTodoAsync", async ({ to
     }
 
     const data = await response.json();
-
-    // Refetch tasks using the current token
-    dispatch(getTasksAsync({ token })); // Pass token as an object
+    // refetch
+    const filter = {};
+    dispatch(getTasksAsync({ token, filter }));
 
     return data;
   } catch (error) {
