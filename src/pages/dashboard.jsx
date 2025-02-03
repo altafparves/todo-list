@@ -49,7 +49,7 @@ useEffect(() => {
 
 const handleCreateTask = async () => {
   if (!taskTitle.trim()) return;
-  await dispatch(addTodoAsync({ title: taskTitle, token }));
+  await dispatch(addTodoAsync({ title: taskTitle,is_completed:"not started", token }));
   setTaskTitle("");
 };
 
