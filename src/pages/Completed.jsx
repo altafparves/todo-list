@@ -49,7 +49,7 @@ const Completed = () => {
         <section className={`flex  h-full  flex-col justify-start  pt-[30px] pb-[20vh] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]`}>
           {/* header */}
           <div className="header w-full flex flex-row justify-between mb-[30px]">
-            <p className="text-page-title text-white">All</p>
+            <p className="text-page-title text-white">Completed</p>
             <p className="text-page-title text-white">{todos.length}</p>
           </div>
           <Filter
