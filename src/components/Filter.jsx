@@ -6,7 +6,7 @@ import { ImCancelCircle } from "react-icons/im";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Filter({priorityFilter,setPriorityFilter,completionFilter,setCompletionFilter,formattedDateRange,setFormattedDateRange}) {
+export default function Filter({ priorityFilter, setPriorityFilter, completionFilter, setCompletionFilter, formattedDateRange, setFormattedDateRange, filterType }) {
   const [isOpen, setIsOpen] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateFilterActive, setDateFilterActive] = useState(false);
@@ -14,6 +14,10 @@ export default function Filter({priorityFilter,setPriorityFilter,completionFilte
   const [showCompletionMenu, setShowCompletionMenu] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
 
+  const showDateFilter = !filterType || filterType !== "today"; // Show if filterType is not "today" or undefined
+  const showPriorityFilter = !filterType || filterType !== "important"; // Show if filterType is not "important" or undefined
+  const showCompletionFilter = !filterType || filterType !== "completed";
+  
   const handleDateSelect = (dates) => {
     const [start, end] = dates;
     setSelectedDateRange([start, end]);
@@ -85,7 +89,7 @@ export default function Filter({priorityFilter,setPriorityFilter,completionFilte
                 transition={{ duration: 0.2 }}
                 className="absolute right-0 mt-2 w-48 bg-button border rounded-lg shadow-lg origin-top-right"
               >
-                <ul className="p-2 space-y-2 flex flex-col">
+                {/* <ul className="p-2 space-y-2 flex flex-col">
                   <button
                     className="p-2 w-full flex items-start text-text text-14-500 hover:text-14-700 hover:text-secondary hover:bg-gray-200 rounded-lg cursor-pointer"
                     onClick={() => {
@@ -113,6 +117,41 @@ export default function Filter({priorityFilter,setPriorityFilter,completionFilte
                   >
                     Completion Status
                   </button>
+                </ul> */}
+                <ul className="p-2 space-y-2 flex flex-col">
+                  {showDateFilter && (
+                    <button
+                      className="p-2 w-full flex items-start text-text text-14-500 hover:text-14-700 hover:text-secondary hover:bg-gray-200 rounded-lg cursor-pointer"
+                      onClick={() => {
+                        setDateFilterActive(true);
+                        setIsOpen(false);
+                      }}
+                    >
+                      Date
+                    </button>
+                  )}
+                  {showPriorityFilter && (
+                    <button
+                      className="p-2 w-full flex items-start text-text text-14-500 hover:text-14-700 hover:text-secondary hover:bg-gray-200 rounded-lg cursor-pointer"
+                      onClick={() => {
+                        setPriorityFilter("High");
+                        setIsOpen(false);
+                      }}
+                    >
+                      Priority Scale
+                    </button>
+                  )}
+                  {showCompletionFilter && (
+                    <button
+                      className="p-2 w-full flex items-start text-text text-14-500 hover:text-14-700 hover:text-secondary hover:bg-gray-200 rounded-lg cursor-pointer"
+                      onClick={() => {
+                        setCompletionFilter("not started");
+                        setIsOpen(false);
+                      }}
+                    >
+                      Completion Status
+                    </button>
+                  )}
                 </ul>
               </motion.div>
             )}
