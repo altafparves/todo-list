@@ -60,10 +60,10 @@ export default function Login() {
             </button>
           </p>
           <div className="form w-full flex flex-col gap-[16px]">
-            <FormItem label="Username" onChange={handleEmailChange} placeholder="Enter your email" />
+            <FormItem label="Email" onChange={handleEmailChange} placeholder="Enter your email" />
             <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
             <div className="flex flex-col gap-[8px] w-full">
-              {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red-500">{error}</p>}
+              {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red">{error}</p>}
               <Button className="mt-[16px]" onClick={handleSubmit}>
                 Login
               </Button>
