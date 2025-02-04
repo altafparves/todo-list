@@ -24,7 +24,7 @@ export default function MenuItems({ name, total, isActive, color, path, onClick,
           {name === "All" ? (
             <FaInbox className="w-[18px] h-[18px]" color={`${isActive ? `#1660F6` : `#FFFFFA`}`} />
           ) : name === "Today" ? (
-            <BsCalendar3 className="w-[18px] h-[18px]" color={`${isActive ? `#FFD643` : `#FFFFFA`}`} />
+            <BsCalendar3 className="w-[15px] h-[15px]" color={`${isActive ? `#F2C31A` : `#FFFFFA`}`} />
           ) : name === "High Priority" ? (
             <p className={`text-16-700 ${isActive ? `text-red` : `#FFFFF`}`}>!</p>
           ) : (

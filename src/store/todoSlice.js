@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ title,token,is_completed }, { rejectWithValue,dispatch }) => {
+export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ title,token,is_completed,due_date }, { rejectWithValue,dispatch }) => {
   try {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/todos`, {
       method: "POST",
@@ -8,7 +8,7 @@ export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ titl
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ title,is_completed }),
+      body: JSON.stringify({ title,is_completed,due_date }),
     });
 
     if (!response.ok) {

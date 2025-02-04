@@ -27,9 +27,9 @@ export default function Sidebar({ isOpen, className }) {
     >
       <div className="flex flex-col gap-[8px]">
         <div className="flex w-full flex-col gap-[10px]">
-          <MenuItems name="All" path="/" isActive={activeMenu === "/"} color="bg-blue" onClick={() => handleMenuClick("/")}/>
-    
+          <MenuItems name="All" path="/" isActive={activeMenu === "/"} color="bg-blue" onClick={() => handleMenuClick("/")} />
 
+          <MenuItems name="Today" path="/high-priority" isActive={activeMenu === "/today"} color="bg-yellow" onClick={() => handleMenuClick("/today")} />
           <MenuItems name="High Priority" path="/high-priority" isActive={activeMenu === "/high-priority"} color="bg-red" onClick={() => handleMenuClick("/high-priority")} />
           <MenuItems name="Completed" path="/completed" isActive={activeMenu === "/completed"} color="bg-grey" onClick={() => handleMenuClick("/completed")} />
         </div>
