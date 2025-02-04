@@ -17,7 +17,7 @@ export default function Filter({ priorityFilter, setPriorityFilter, completionFi
   const showDateFilter = !filterType || filterType !== "today"; // Show if filterType is not "today" or undefined
   const showPriorityFilter = !filterType || filterType !== "important"; // Show if filterType is not "important" or undefined
   const showCompletionFilter = !filterType || filterType !== "completed";
-  
+
   const handleDateSelect = (dates) => {
     const [start, end] = dates;
     setSelectedDateRange([start, end]);
@@ -71,10 +71,10 @@ export default function Filter({ priorityFilter, setPriorityFilter, completionFi
 
   return (
     <div className="w-full flex flex-col items-start gap-[12px] mb-[12px]">
-      <div className="w-full pb-2 flex justify-between border-b-2 border-button">
-        <button className="text-14-400 border-b-2 border-blue text-text py-[8px] px-[12px]">List</button>
+      <div className="w-full  flex justify-between border-b-2 border-button">
+        <button className="text-14-400 mb-[-2px] border-b-2 border-blue text-text py-[8px] px-[12px]">List</button>
         {/* Filter */}
-        <div className="relative inline-block">
+        <div className="relative pb-2 inline-block">
           <button className="flex items-center mb-2 flex-row gap-2 text-white bg-button px-4 py-2 text-sm font-medium rounded-lg" onClick={() => setIsOpen(!isOpen)}>
             <HiAdjustments className="text-lg" />
             Filter
