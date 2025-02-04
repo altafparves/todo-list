@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { useState, useEffect, useCallback } from "react";
 import { addTodoAsync, getTasksAsync } from "../store/todoSlice";
-
+import CreateTask from "../components/CreateTask";
 const HighPriority = () => {
   const dispatch = useDispatch();
   const [taskTitle, setTaskTitle] = useState("");
@@ -46,21 +46,21 @@ const HighPriority = () => {
 
   const handleCreateTask = async () => {
     if (!taskTitle.trim()) return;
-    await dispatch(addTodoAsync({ title: taskTitle, is_completed: "not started", token }));
+    await dispatch(addTodoAsync({ title: taskTitle, is_completed: "not started",priority:'High', token }));
     setTaskTitle("");
   };
 
   return (
     <>
       <div className="relative w-full h-full overflow-auto scroll-smooth">
-        <section className={`flex  flex-col justify-start h-auto pt-[30px] pb-[20vh] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]`}>
+        <section className={`flex  flex-col justify-start h-full pt-[30px] pb-[20vh] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px]`}>
           {/* header */}
           <div className="header w-full flex flex-row justify-between mb-[30px]">
             <p className="text-page-title text-white">High Priority</p>
             <p className="text-page-title text-white">{todos.length}</p>
           </div>
           <Filter
-          filterType="important"
+            filterType="important"
             completionFilter={completionFilter}
             setCompletionFilter={setCompletionFilter}
             priorityFilter={priorityFilter}
@@ -76,25 +76,13 @@ const HighPriority = () => {
           ) : todos.length > 0 ? (
             todos.map((task) => <Task key={task.todo_id} task={task} />)
           ) : (
-            <p>No tasks available</p>
+            <div className="w-full  h-full flex flex-col items-center justify-center gap-[20px]">
+              <p className="text-[24px] font-bold text-grey flex flex-col items-center">No high-priority tasks found.</p>
+            </div>
           )}
         </section>
-
         {/* Create new task */}
-        <div className="fixed bottom-0 w-full md:w-[calc(100%-255px)] px-[12px] md:px-[24px] lg:px-[100px] xl:px-[220px] h-auto">
-          <div className="w-full px-[10px] py-[16px] flex flex-row justify-between items-center bg-button rounded-t-[16px]">
-            <input
-              type="text"
-              className="text-16-500 w-[60%] sm:w-[80%] appearance-none bg-inherit text-text leading-tight focus:outline-none focus:shadow-outline"
-              placeholder="Create a new Task"
-              value={taskTitle}
-              onChange={(e) => setTaskTitle(e.target.value)}
-            />
-            <button className="bg-blue rounded-full text-14-700  lg:text-16-700 text-text py-[8px] lg:py-[12px] px-[16px] lg:px-[32px] whitespace-nowrap" onClick={handleCreateTask}>
-              {loading ? "Creating..." : "Create +"}
-            </button>
-          </div>
-        </div>
+        <CreateTask taskTitle={taskTitle} setTaskTitle={setTaskTitle} handleCreateTask={handleCreateTask} loading={loading}></CreateTask>
       </div>
     </>
   );

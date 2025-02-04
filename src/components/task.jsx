@@ -7,8 +7,6 @@ import debounce from "lodash/debounce";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
-
 export default function Task({ task }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
