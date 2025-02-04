@@ -21,14 +21,20 @@ export default function Filter({priorityFilter,setPriorityFilter,completionFilte
     if (start && end) {
       setShowDatePicker(false);
       setDateFilterActive(true);
-      const formattedStart = start.toISOString().slice(0, 10);
-      const formattedEnd = end.toISOString().slice(0, 10);
+
+      const formatOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
+      const formattedStart = start.toLocaleDateString("en-CA", formatOptions);
+      const formattedEnd = end.toLocaleDateString("en-CA", formatOptions);
+
       setFormattedDateRange({ start: formattedStart, end: formattedEnd });
     } else if (start) {
-      const formattedStart = start.toISOString().slice(0, 10);
+      setDateFilterActive(true); // still active even if end date is not selected
+      const formatOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
+      const formattedStart = start.toLocaleDateString("en-CA", formatOptions);
       setFormattedDateRange({ start: formattedStart, end: null });
     } else {
       setFormattedDateRange({ start: null, end: null });
+      setDateFilterActive(false); // deactive if no date is selected
     }
   };
 

@@ -20,20 +20,17 @@ const [formattedDateRange, setFormattedDateRange] = useState({
 });
 
 const fetchTasksWithFilters = useCallback(() => {
-  const filter = {}; // Start with an empty filter object
+  const filter = {}; 
 
   if (priorityFilter) {
-    // Check if priorityFilter has a value
     filter.priority = priorityFilter;
   }
 
   if (completionFilter) {
-    // Check if completionFilter has a value (it can be true/false or null)
     filter.is_complete = completionFilter;
   }
 
   if (formattedDateRange.start && formattedDateRange.end) {
-    // Check if both start and end dates are present
     filter.start = formattedDateRange.start;
     filter.end = formattedDateRange.end;
   }
