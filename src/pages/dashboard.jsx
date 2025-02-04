@@ -35,7 +35,7 @@ const fetchTasksWithFilters = useCallback(() => {
     filter.end = formattedDateRange.end;
   }
 
-  dispatch(getTasksAsync({ token, filter }));
+  dispatch(getTasksAsync({ token, filter, category: "all" }));
 }, [dispatch, token, priorityFilter, completionFilter, formattedDateRange]);
 
 useEffect(() => {

@@ -27,8 +27,7 @@ export const addTodoAsync = createAsyncThunk("todos/addTodoAsync", async ({ titl
   }
 });
 
-
-export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ token, filter = {}, search = "" }, { rejectWithValue }) => {
+export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ token, filter = {}, search = "", category = "all" }, { rejectWithValue }) => {
   try {
     const params = new URLSearchParams();
 
@@ -40,8 +39,11 @@ export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ to
       params.append("is_complete", filter.is_complete);
     }
 
-    if (filter.start && filter.end) {
+    if (filter.start) {
       params.append("start", filter.start);
+    }
+
+    if (filter.end) {
       params.append("end", filter.end);
     }
 
@@ -50,7 +52,23 @@ export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ to
     }
 
     const queryString = params.toString();
-    const url = `https://todo-app-project-indol.vercel.app/todos${queryString ? `?${queryString}` : ""}`;
+
+    let endpoint = "todos"; // Default endpoint
+    switch (category) {
+      case "today":
+        endpoint = "todos/today";
+        break;
+      case "high_priority":
+        endpoint = "todos/high_priority";
+        break;
+      case "completed":
+        endpoint = "todos/completed";
+        break;
+      default:
+        endpoint = "todos";
+    }
+
+    const url = `${process.env.REACT_APP_API_URL}/${endpoint}${queryString ? `?${queryString}` : ""}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -65,12 +83,17 @@ export const getTasksAsync = createAsyncThunk("todos/getTasksAsync", async ({ to
     }
 
     const data = await response.json();
-    return data.datas;
+
+    if (data && data.datas && Array.isArray(data.datas)) {
+      return data.datas;
+    } else {
+      console.error("Invalid API response:", data);
+      return rejectWithValue("Invalid API response format.  Check the console for details.");
+    }
   } catch (error) {
-    return rejectWithValue(error.message);
+    return rejectWithValue(error.message); // Reject with the error message
   }
 });
-
 
 export const deleteTodoAsync = createAsyncThunk("todos/deleteTodoAsync", async ({ todo_id, token }, { rejectWithValue }) => {
   try {
@@ -94,15 +117,13 @@ export const deleteTodoAsync = createAsyncThunk("todos/deleteTodoAsync", async (
 
 
 export const editTodoAsync = createAsyncThunk("todos/editTodoAsync", async ({ todo_id, updates }, { rejectWithValue, dispatch, getState }) => {
-  // Access getState
   try {
-    const token = getState().auth.token; // Get current token from state
-
+    const token = getState().auth.token; 
     const response = await fetch(`https://todo-app-project-indol.vercel.app/todos/${todo_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Use the token from getState
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(updates),
     });
