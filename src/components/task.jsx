@@ -1,11 +1,12 @@
 import { FaRegCalendarCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTodoAsync, editTodoAsync } from "../store/todoSlice";
-import { useSwipeable } from "react-swipeable";
 import { useCallback, useState,useRef,useEffect } from "react";
 import debounce from "lodash/debounce";
+import { FaTrash } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Button from "./button";
 
 export default function Task({ task }) {
   const dispatch = useDispatch();
@@ -81,12 +82,6 @@ export default function Task({ task }) {
     setShowTaskCompletionMenu(false);
   };
 
-  const handlers = useSwipeable({
-    onSwipedLeft: () => handleDelete(),
-    preventScrollOnSwipe: true,
-    trackMouse: true,
-  });
-
   // handle edit
   const handleEditBlur = (e) => {
     if (taskRef.current && !taskRef.current.contains(e.relatedTarget)) {
@@ -117,14 +112,12 @@ export default function Task({ task }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   return (
-    <div {...handlers} className="task w-full">
+    <div className="task w-full">
       <div onClick={handleEditClick} ref={taskRef} className="task ref={taskRef}  w-full border-b-1 transition duration-300 ease-in-out hover:bg-secondary border-button py-[12px] border-b flex flex-col gap-[8px]">
         <div className="flex flex-row items-center w-full gap-[8px]">
           <input type="checkbox" className="form-radio h-4 w-4 text-blue-600" checked={task.is_completed === "done"} onChange={handleComplete} />
           <div className="w-full flex flex-row items-center">
-            {" "}
             {isEditing ? (
               <input
                 type="text"
@@ -137,6 +130,11 @@ export default function Task({ task }) {
               />
             ) : (
               <p className="text-15-700 text-text cursor-pointer">{task.title}</p>
+            )}
+            {isEditing && (
+              <button onClick={handleDelete} className="mr-[16px] transition-colors ease-in-out text-grey hover:text-red width-[24px] height-[24px]">
+                <FaTrash />
+              </button>
             )}
           </div>
         </div>
