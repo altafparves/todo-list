@@ -122,14 +122,14 @@ export default function Task({ task }) {
               <input
                 type="text"
                 value={editTitle}
-                className="w-full text-15-700 text-text border-none bg-transparent focus:outline-none focus:ring-0 hover:bg-transparent"
+                className="w-full text-task-title text-text border-none bg-transparent focus:outline-none focus:ring-0 hover:bg-transparent"
                 onChange={handleEditTitleChange}
                 onBlur={handleEditBlur}
                 onKeyDown={handleKeyDown}
                 autoFocus
               />
             ) : (
-              <p className="text-15-700 text-text cursor-pointer">{task.title}</p>
+              <p className="text-task-title text-text cursor-pointer">{task.title}</p>
             )}
             {isEditing && (
               <button onClick={handleDelete} className="mr-[16px] transition-colors ease-in-out text-grey hover:text-red width-[24px] height-[24px]">
