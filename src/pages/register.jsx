@@ -67,8 +67,8 @@ export default function Register() {
             </button>
           </p>
           <div className="form w-full flex flex-col gap-[16px]">
-            <FormItem label="Email" onChange={handleEmailChange} placeholder="blabla@gmail.com" />
-            <FormItem label="Username" onChange={handleUsernameChange} placeholder="altaf gacor" />
+            <FormItem label="Email" onChange={handleEmailChange} placeholder="mrjhon@gmail.com" />
+            <FormItem label="Username" onChange={handleUsernameChange} placeholder="Jhon" />
 
             <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
             <div className="flex flex-col gap-[8px] w-full">
