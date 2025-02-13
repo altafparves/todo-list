@@ -7,6 +7,7 @@ import { FaTrash } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { motion, AnimatePresence } from "motion/react";
+import { PriorityColor } from "../utils/ChipStyles";
 
 export default function Task({ task }) {
   const dispatch = useDispatch();
@@ -130,22 +131,15 @@ export default function Task({ task }) {
     };
   }, []);
 
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "High":
-        return "#FF5733";
-      case "Medium":
-        return "#F67E3D";
-      case "Low":
-        return "#D1F63D";
-      default:
-        return "transparent"; // Or a very light gray if you prefer
-    }
-  };
   return (
     <AnimatePresence>
       {!isDeleting && (
-        <motion.div key={task.todo_id} initial={{ opacity: 0, y: -20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.8 }} transition={{ duration: 0.3, ease: "easeInOut" }} className="task w-full">
+        <motion.div
+          key={task.todo_id}
+          exit={{ opacity: 0, y: 20, scale: 0.8 }} // Only exit animation
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="task w-full"
+        >
           <div onClick={handleEditClick} ref={taskRef} className="task ref={taskRef}  w-full border-b-1 transition duration-300 ease-in-out hover:bg-secondary border-button py-[12px] border-b flex flex-col gap-[8px]">
             <div className="flex flex-row items-center w-full gap-[8px]">
               <input type="checkbox" className="form-radio h-4 w-4 text-blue-600" checked={localIsCompleted} onChange={handleComplete} />
@@ -269,7 +263,7 @@ rounded-[12px]"
                 </div>
               ) : (
                 task.priority && (
-                  <div style={{ backgroundColor: getPriorityColor(task?.priority) }} className="rounded-full w-fit  bg-button text-14-700 text-secondary py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">
+                  <div style={{ backgroundColor: PriorityColor(task?.priority) }} className="rounded-full w-fit  bg-button text-14-700 text-secondary py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">
                     {task.priority}
                   </div>
                 )
