@@ -4,6 +4,7 @@ import Button from "../components/button";
 import PasswordForm from "../components/passwordForm";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import Mockup from "../assets/mockup.png";
 
 export default function Login() {
   const [formValues, setFormValues] = useState({
@@ -47,15 +48,14 @@ export default function Login() {
 
   return (
     <section className="w-full h-screen overflow-hidden bg-base flex flex-row justify-center items-center px-[20px] py-[24px]">
-      <div className="hidden h-full md:flex w-1/2 rounded-[12px] bg-grey"></div>
+      <div className="hidden h-full md:flex w-1/2 p-[12px] rounded-[12px] bg-secondary">
+        <img src={Mockup} style={{ objectPosition: "50% 70%" }} className="w-full  object-cover rounded-[12px]" alt="" />
+      </div>
       <div className="w-full md:w-1/2 flex items-center justify-center">
         <div className="content flex w-full md:w-[50%]  h-auto flex-col items-center gap-[37px]">
           <p className="flex flex-col items-center text-text text-center text-26-700">
             Login
-            <button
-              className="text-14-500"
-              onClick={handleRegisterNavigation}
-            >
+            <button className="text-14-500" onClick={handleRegisterNavigation}>
               or create an <span className="underline">account</span>
             </button>
           </p>
