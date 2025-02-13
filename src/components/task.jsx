@@ -6,7 +6,6 @@ import debounce from "lodash/debounce";
 import { FaTrash } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Button from "./button";
 
 export default function Task({ task }) {
   const dispatch = useDispatch();
@@ -19,11 +18,23 @@ export default function Task({ task }) {
     dispatch(deleteTodoAsync({ todo_id: task.todo_id, token }));
   };
 
-  // edit status from checkbox
-  const handleComplete = () => {
-    const newStatus = task.is_completed === "done" ? "not started" : "done";
-    dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: newStatus }, token }));
-  };
+  const [localIsCompleted, setLocalIsCompleted] = useState(task.is_completed === "done"); 
+
+  useEffect(() => {
+    setLocalIsCompleted(task.is_completed === "done");
+  }, [task]);
+
+  console.log("ini",localIsCompleted);
+
+
+   const handleComplete = () => {
+     setLocalIsCompleted(!localIsCompleted);
+
+     setTimeout(() => {
+       const newStatus = localIsCompleted ? "not started" : "done"; 
+       dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: newStatus }, token }));
+     }, 1000);
+   };
 
   // edit title
   const debouncedEditTitle = useCallback(
@@ -116,7 +127,7 @@ export default function Task({ task }) {
     <div className="task w-full">
       <div onClick={handleEditClick} ref={taskRef} className="task ref={taskRef}  w-full border-b-1 transition duration-300 ease-in-out hover:bg-secondary border-button py-[12px] border-b flex flex-col gap-[8px]">
         <div className="flex flex-row items-center w-full gap-[8px]">
-          <input type="checkbox" className="form-radio h-4 w-4 text-blue-600" checked={task.is_completed === "done"} onChange={handleComplete} />
+          <input type="checkbox" className="form-radio h-4 w-4 text-blue-600" checked={localIsCompleted} onChange={handleComplete} />
           <div className="w-full flex flex-row items-center">
             {isEditing ? (
               <input
