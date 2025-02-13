@@ -1,13 +1,12 @@
 import { FaRegCalendarCheck } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTodoAsync, editTodoAsync } from "../store/todoSlice";
-import { useCallback, useState,useRef,useEffect } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import debounce from "lodash/debounce";
 import { FaTrash } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { motion, AnimatePresence } from "motion/react";
-
 
 export default function Task({ task }) {
   const dispatch = useDispatch();
@@ -18,31 +17,30 @@ export default function Task({ task }) {
   const [editDesc, setEditDesc] = useState(task.description || "");
   const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = () => {
-    setIsDeleting(true); 
+    setIsDeleting(true);
 
     setTimeout(() => {
       dispatch(deleteTodoAsync({ todo_id: task.todo_id, token }));
-      setIsDeleting(false); 
+      setIsDeleting(false);
     }, 300);
   };
-  
-  const [localIsCompleted, setLocalIsCompleted] = useState(task.is_completed === "done"); 
+
+  const [localIsCompleted, setLocalIsCompleted] = useState(task.is_completed === "done");
 
   useEffect(() => {
     setLocalIsCompleted(task.is_completed === "done");
   }, [task]);
 
-  console.log("ini",localIsCompleted);
+  console.log("ini", localIsCompleted);
 
+  const handleComplete = () => {
+    setLocalIsCompleted(!localIsCompleted);
 
-   const handleComplete = () => {
-     setLocalIsCompleted(!localIsCompleted);
-
-     setTimeout(() => {
-       const newStatus = localIsCompleted ? "not started" : "done"; 
-       dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: newStatus }, token }));
-     }, 1000);
-   };
+    setTimeout(() => {
+      const newStatus = localIsCompleted ? "not started" : "done";
+      dispatch(editTodoAsync({ todo_id: task.todo_id, updates: { is_completed: newStatus }, token }));
+    }, 1000);
+  };
 
   // edit title
   const debouncedEditTitle = useCallback(
@@ -131,17 +129,23 @@ export default function Task({ task }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case "High":
+        return "#FF5733";
+      case "Medium":
+        return "#F67E3D";
+      case "Low":
+        return "#D1F63D";
+      default:
+        return "transparent"; // Or a very light gray if you prefer
+    }
+  };
   return (
     <AnimatePresence>
       {!isDeleting && (
-        <motion.div
-          key={task.todo_id} 
-          initial={{ opacity: 0, y: -20, scale: 0.9 }} 
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20, scale: 0.8 }} 
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="task w-full"
-        >
+        <motion.div key={task.todo_id} initial={{ opacity: 0, y: -20, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.8 }} transition={{ duration: 0.3, ease: "easeInOut" }} className="task w-full">
           <div onClick={handleEditClick} ref={taskRef} className="task ref={taskRef}  w-full border-b-1 transition duration-300 ease-in-out hover:bg-secondary border-button py-[12px] border-b flex flex-col gap-[8px]">
             <div className="flex flex-row items-center w-full gap-[8px]">
               <input type="checkbox" className="form-radio h-4 w-4 text-blue-600" checked={localIsCompleted} onChange={handleComplete} />
@@ -160,9 +164,6 @@ export default function Task({ task }) {
                   <p className="text-task-title text-text cursor-pointer">{task.title}</p>
                 )}
                 {isEditing && (
-                  // <button onClick={handleDelete} className="mr-[16px] transition-colors ease-in-out text-grey hover:text-red width-[24px] height-[24px]">
-                  //   <FaTrash />
-                  // </button>
                   <motion.button
                     onClick={handleDelete}
                     className="mr-[16px] transition-colors ease-in-out text-grey hover:text-red width-[24px] height-[24px]"
@@ -193,7 +194,7 @@ export default function Task({ task }) {
             <div className="w-full pl-[24px] flex-wrap flex gap-[8px]">
               {/* Due Date */}
               {isEditing ? (
-                <div className="relative ml-[24px]">
+                <div className="relative">
                   <button className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text" onClick={() => setShowDatePicker(!showDatePicker)}>
                     <FaRegCalendarCheck className="text-lg" />
                     {editDueDate ? editDueDate.toLocaleDateString("en-GB") : "Add Date"}
@@ -217,26 +218,25 @@ export default function Task({ task }) {
                   </div>
                 )
               )}
-              {/* {task.due_date && (
-            <div className="rounded-full w-fit bg-button text-12-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">
-              <FaRegCalendarCheck className="text-lg" />
-              {task.due_date}
-            </div>
-          )} */}
               {/* completion */}
               {isEditing ? (
-                <div className="relative ml-[24px]">
+                <div className="relative ">
                   <button
                     className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text"
                     onClick={() => setShowTaskCompletionMenu(!showTaskCompletionMenu)} // Toggle menu
                   >
-                    {editCompletion ? editCompletion : "Add Status"} {/* Show status or "Add Status" */}
+                    {editCompletion ? editCompletion : "Add Status"}
                   </button>
 
                   {showTaskCompletionMenu && (
                     <div className="absolute top-12 left-1/2 transform -translate-x-1/2 bg-button p-2 rounded-lg shadow-lg z-50">
                       {["not started", "in progress", "done"].map((status) => (
-                        <button key={status} className="block text-text w-full text-left px-4 py-2 text-14-500 hover:bg-secondary rounded-[12px]" onClick={() => handleCompletionSelect(status)}>
+                        <button
+                          key={status}
+                          className="block text-text w-full text-left px-4 py-2 text-14-500 hover:bg-secondary whitespace-nowrap
+rounded-[12px]"
+                          onClick={() => handleCompletionSelect(status)}
+                        >
                           {status}
                         </button>
                       ))}
@@ -249,7 +249,7 @@ export default function Task({ task }) {
 
               {/* Priority */}
               {isEditing ? (
-                <div className="relative ml-[24px]">
+                <div className="relative">
                   <button
                     className="flex items-center bg-button rounded-full px-[12px] py-[4px] gap-[10px] text-12-500 text-secondary-text"
                     onClick={() => setShowTaskPriorityMenu(!showTaskPriorityMenu)} // Use Task's state
@@ -268,7 +268,11 @@ export default function Task({ task }) {
                   )}
                 </div>
               ) : (
-                task.priority && <div className="rounded-full w-fit bg-button text-14-500 text-secondary-text py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">{task.priority}</div>
+                task.priority && (
+                  <div style={{ backgroundColor: getPriorityColor(task?.priority) }} className="rounded-full w-fit  bg-button text-14-700 text-secondary py-[4px] gap-[10px] px-[12px] flex flex-row justify-start items-center">
+                    {task.priority}
+                  </div>
+                )
               )}
             </div>
           </div>
@@ -277,5 +281,3 @@ export default function Task({ task }) {
     </AnimatePresence>
   );
 }
-
-
