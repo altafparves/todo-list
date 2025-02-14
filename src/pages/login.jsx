@@ -29,14 +29,12 @@ export default function Login() {
       password: value,
     }));
   };
-    console.log(formValues);
 
 
   const handleSubmit = async () => {
     try {
       setError(null); 
       await login(formValues); // Call the login function
-      console.log(formValues);
     } catch (err) {
       setError(err.message); // Set error message if login fails
     }

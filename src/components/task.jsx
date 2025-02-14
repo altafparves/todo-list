@@ -32,7 +32,6 @@ export default function Task({ task }) {
     setLocalIsCompleted(task.is_completed === "done");
   }, [task]);
 
-  console.log("ini", localIsCompleted);
 
   const handleComplete = () => {
     setLocalIsCompleted(!localIsCompleted);

@@ -17,7 +17,6 @@ const Today = () => {
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   const dueDate = `${year}-${month}-${day}`;
-  console.log("ini date", dueDate);
 
   // filter state
   const [priorityFilter, setPriorityFilter] = useState(null);

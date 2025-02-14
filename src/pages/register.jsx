@@ -39,7 +39,6 @@ export default function Register() {
 
 
   const handleSubmit = async () => {
-    console.log(formValues);
     try {
       setError(null);
       await register(formValues); 
