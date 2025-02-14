@@ -46,6 +46,8 @@ export default function Login() {
     navigate("/register");
   };
 
+  const isButtonDisabled = !formValues.email.trim() || !formValues.password.trim();
+
   return (
     <section className="w-full h-screen overflow-hidden bg-base flex flex-row justify-center items-center px-[20px] py-[24px]">
       <div className="hidden h-full md:flex w-1/2 p-[12px] rounded-[12px] bg-secondary">
@@ -64,7 +66,7 @@ export default function Login() {
             <PasswordForm label="Password" onChange={handlePasswordChange} placeholder="Enter your password" />
             <div className="flex flex-col gap-[8px] w-full">
               {error && <p className="mt-[3px] pl-[14px] text-11-400 text-red">{error}</p>}
-              <Button className="mt-[16px]" onClick={handleSubmit}>
+              <Button disabled={isButtonDisabled} className="mt-[16px]" onClick={handleSubmit}>
                 Login
               </Button>
             </div>
