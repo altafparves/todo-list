@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+<a id="readme-top"></a>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<br />
+<div align="center">
+  <h3 align="center">Todo List</h3>
 
-## Available Scripts
+  <p align="center">
+    A simple and intuitive todo list application designed for efficient task management.  It offers features like filtering, priority levels, due dates, and status tracking to help you stay organized.
+    <br />
+    <br />
+    <a href="https://todo-list-gamma-sage-88.vercel.app/login">View Demo</a>
+  </p>
+</div>
 
-In the project directory, you can run:
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li><a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-### `npm start`
+## About The Project
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/337a3c05-4e22-48d4-96e6-5be46e8fc518" />
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+This Todo List app is designed to be user-friendly and efficient, helping you manage your tasks effectively. Key features include:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+*   **Task Filtering:** Quickly filter tasks by "Today," "Completed," "All," or "Important."
+*   **Priority Levels:** Assign priority levels (e.g., Low, Medium, High) to your tasks.
+*   **Due Dates:** Set due dates for tasks to keep track of deadlines.
+*   **Status Tracking:** Monitor the progress of your tasks with status updates (e.g., Not Started, In Progress, Done).
+*   **Intuitive Interface:**  A clean and modern UI for easy navigation and task management.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Built With
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+*   [![React][React.js]][React-url]
+*   [![Redux][Redux.js]][Redux-url]
+*   [![Tailwind][Tailwind.css]][Tailwind-url]
+*   [![Framer Motion][Framer.motion]][Framer-url]
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+## Getting Started
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To get a local copy up and running, follow these steps:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Prerequisites
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+*   Node.js (v16 or higher recommended)
+*   npm (or yarn)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Installation
 
-## Learn More
+1.  Clone the repository:
+    ```sh
+    git clone [https://github.com/github_username/repo_name.git](https://github.com/github_username/repo_name.git)
+    ```
+2.  Navigate to the project directory:
+    ```sh
+    cd repo_name
+    ```
+3.  Install dependencies:
+    ```sh
+    npm install  # or yarn install
+    ```
+4.  Start the development server:
+    ```sh
+    npm start # or yarn start
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Usage
 
-### Code Splitting
+This section provides a guide on how to use the Todo List application effectively.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. **Creating a Task:**
 
-### Analyzing the Bundle Size
+   - In the "Create a new Task" field, simply type in the description of your task.
+   - Click the "Create +" button to add the task to your list.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+2. **Viewing and Managing Tasks:**
 
-### Making a Progressive Web App
+   - Tasks are displayed in the main list area.
+   - Each task shows its description, due date (if set), priority level, and status.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+3. **Editing a Task:**
 
-### Advanced Configuration
+   - Click on a task in the list to open the task details for editing.
+   - You can:
+     - Rename the task directly in the description field.
+     - Add or modify the description.
+     - Set or change the due date using the date dropdown.
+     - Set or change the priority level using the priority dropdown (e.g., Low, Medium, High).
+     - Change the task status using the status dropdown (e.g., Not Started, In Progress, Done).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+4. **Marking a Task as Done:**
 
-### Deployment
+   - To mark a task as completed, simply check the box located next to the task.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+5. **Menu**
 
-### `npm run build` fails to minify
+   - Use the menu in sidebar to see  different views:
+     - **All:** Shows all tasks.
+     - **Today:** Shows tasks due today.
+     - **High Priority:** Shows tasks with high priority.
+     - **Completed:** Shows tasks that have been marked as complete.
+5. **Filter**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+   - Click filter button and click again the filter options:
+     - **Due Date**
+     - **Priority Scale**
+     - **Completion Status**
+     - **Completed:**
+
+
+## Contributing
+
+Contributions are welcome!  If you'd like to contribute to this project, please follow these steps:
+
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix.
+3.  Make your changes.
+4.  Commit your changes and push them to your branch.
+5.  Submit a pull request.
+
+
+<!--## License-->
+
+<!--blbla-->
+
+## Contact
+
+Altaf Parves - [@shuaaltaf](https://www.instagram.com/shuaaltaf/) - altafparvesh@gmail.com
+
+Project Link: [https://github.com/altafparves/todo-list](https://github.com/altafparves/todo-list)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Redux.js]: https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white
+[Redux-url]: https://redux.js.org/
+[Tailwind.css]: https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[Framer.motion]: https://img.shields.io/badge/Framer_Motion-E81C62?style=for-the-badge&logo=framer&logoColor=white
+[Framer-url]: https://www.framer.com/motion/
